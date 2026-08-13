@@ -157,40 +157,54 @@ public class Home {
 				} else {
 					System.out.println("---- Transações ----");
 					for (int i = 0; i < transactions.size(); i++) {
-						System.out.println((i+1) + " - " + transactions.get(i));
+						System.out.println((i + 1) + " - " + transactions.get(i));
 					}
 				}
 				break;
 			case 3:
 				System.out.println("---- Deletando Transação ----");
-				
+
 				if (transactions.isEmpty()) {
-					System.out.println("Não há transações cadastradas!");	
+					System.out.println("Não há transações cadastradas!");
 					break;
 				} else {
 					System.out.println("---- Transações ----");
 					for (int i = 0; i < transactions.size(); i++) {
-						System.out.println((i+1) + " - " + transactions.get(i));
-					
+						System.out.println((i + 1) + " - " + transactions.get(i));
+
 					}
-					
-					System.out.println("Digite a transação que deseja deletar:");
+
+					System.out.println("\nDigite a transação que deseja deletar:");
 					int deletInput = sc.nextInt();
 					sc.nextLine();
 
 					if (deletInput >= 1 && deletInput <= transactions.size()) {
-					    transactions.remove(deletInput - 1);
-					    System.out.println("Transação removida!");
+						transactions.remove(deletInput - 1);
+						System.out.println("Transação removida!");
 					} else {
-					    System.out.println("Número inválido!");
+						System.out.println("Número inválido!");
 					}
-					
+
 				}
-		
-				
 				break;
 			case 4:
-				System.out.println("Saldo: R$xxxx");
+
+				double balance = 0;
+
+				for (String t : transactions) {
+					String[] parts = t.split(";");
+					Double valueOutput = Double.parseDouble(parts[1]);
+					String typeOutput = parts[2];
+
+					if (typeOutput.equals("Receita")) {
+						balance += valueOutput;
+					} else {
+						balance -= valueOutput;
+					}
+				}
+
+				System.out.println("Saldo Atual: R$" + balance);
+
 				break;
 			case 5:
 				System.out.println("Fechando programa...");
