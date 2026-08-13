@@ -19,8 +19,9 @@ public class Home {
 			System.out.println("======== Controle de Gastos ========");
 			System.out.println("Digite (1) Adicionar uma Transação");
 			System.out.println("Digite (2) Listar suas Transação");
-			System.out.println("Digite (3) Ver Saldo");
-			System.out.println("Digite (4) Fechar o programa");
+			System.out.println("Digite (3) Deletar uma Transação");
+			System.out.println("Digite (4) Ver Saldo");
+			System.out.println("Digite (5) Fechar o programa");
 			option = sc.nextInt();
 			sc.nextLine();
 
@@ -149,16 +150,24 @@ public class Home {
 				System.out.println("Transação Adicionada!");
 				break;
 			case 2:
-				System.out.println("Listando transações...");
+				if (transactions.isEmpty()) {
+					System.out.println("Não há transações cadastradas!");
+				} else {
+					System.out.println("---- Transações ----");
+					for (String t : transactions) {
+						System.out.println(t);
+					}
+				}
 				break;
 			case 3:
-				System.out.println("Saldo atual: xxxx");
+				System.out.println("Deletando trasação...");
 				break;
 			case 4:
-				System.out.println("Fechando o programa...");
-
+				System.out.println("Saldo: R$xxxx");
+				break;
+			case 5:
+				System.out.println("Fechando programa...");
 				run = false;
-
 				break;
 			default:
 				System.out.println("Opção inválida!");
