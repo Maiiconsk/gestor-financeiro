@@ -19,9 +19,10 @@ public class Home {
 			System.out.println("======== Controle de Gastos ========");
 			System.out.println("Digite (1) Adicionar uma Transação");
 			System.out.println("Digite (2) Listar suas Transação");
-			System.out.println("Digite (3) Deletar uma Transação");
-			System.out.println("Digite (4) Ver Saldo");
-			System.out.println("Digite (5) Fechar o programa");
+			System.out.println("Digite (3) Editar uma Transação");
+			System.out.println("Digite (4) Excluir uma Transação");
+			System.out.println("Digite (5) Ver Saldo");
+			System.out.println("Digite (0) Fechar o programa");
 			option = sc.nextInt();
 			sc.nextLine();
 
@@ -162,7 +163,81 @@ public class Home {
 				}
 				break;
 			case 3:
-				System.out.println("---- Deletando Transação ----");
+				System.out.println("---- Editor de Transação ----");
+
+				if (transactions.isEmpty()) {
+					System.out.println("Não há transações cadastradas!");
+					break;
+				} else {
+					System.out.println("---- Transações ----");
+					for (int i = 0; i < transactions.size(); i++) {
+						System.out.println((i + 1) + " - " + transactions.get(i));
+
+					}
+				}
+
+				System.out.println("\nDigite a transação que deseja deletar:");
+				int editInput = sc.nextInt();
+				sc.nextLine();
+
+				System.out.println("1 - Descrição");
+				System.out.println("2 - Valor");
+				System.out.println("3 - Tipo");
+				System.out.println("4 - Categoria");
+				System.out.println("5 - Data");
+				System.out.println("Digite a opção que deseja editar: ");
+				int editOption = sc.nextInt();
+				sc.nextLine();
+
+				if (editInput >= 1 && editInput <= transactions.size()) {
+
+					String[] partsEdit = transactions.get(editInput - 1).split(";");
+
+					switch (editOption) {
+
+					case 1:
+						System.out.print("Nova Descrição: ");
+						partsEdit[0] = sc.nextLine();
+						break;
+
+					case 2:
+						System.out.print("Novo Valor: ");
+						partsEdit[1] = sc.nextLine();
+						break;
+
+					case 3:
+						System.out.print("Novo Tipo: ");
+						partsEdit[2] = sc.nextLine();
+						break;
+
+					case 4:
+						System.out.print("Nova Categoria: ");
+						partsEdit[3] = sc.nextLine();
+						break;
+
+					case 5:
+						System.out.print("Nova Data: ");
+						partsEdit[4] = sc.nextLine();
+						break;
+
+					default:
+						System.out.println("Opção inválida!");
+						break;
+					}
+					
+					  String transacaoAtualizada = partsEdit[0] + ";" + partsEdit[1] + ";" + partsEdit[2] + ";" + partsEdit[3] + ";" + partsEdit[4];
+					    transactions.set(editInput - 1, transacaoAtualizada);
+
+					    System.out.println("Transação atualizada!");
+					
+				} else {
+					System.out.println("Transação inválida!");
+				}
+
+				break;
+
+			case 4:
+				System.out.println("---- Exclusão de Transação ----");
 
 				if (transactions.isEmpty()) {
 					System.out.println("Não há transações cadastradas!");
@@ -187,7 +262,7 @@ public class Home {
 
 				}
 				break;
-			case 4:
+			case 5:
 
 				double balance = 0;
 
@@ -206,7 +281,7 @@ public class Home {
 				System.out.println("Saldo Atual: R$" + balance);
 
 				break;
-			case 5:
+			case 0:
 				System.out.println("Fechando programa...");
 				run = false;
 				break;
