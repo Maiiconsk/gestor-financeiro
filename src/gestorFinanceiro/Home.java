@@ -28,6 +28,8 @@ public class Home {
 			switch (option) {
 
 			case 1:
+				System.out.println("---- Transação ----");
+
 				System.out.print("Descrição: ");
 				String description = sc.nextLine();
 
@@ -45,16 +47,16 @@ public class Home {
 					}
 				}
 
-				System.out.println("Tipo: ");
+				System.out.println("---- Tipo ----");
 				System.out.println("1 - Receita:");
 				System.out.println("2 - Despesa:");
-				int typeinput = sc.nextInt();
+				int typeInput = sc.nextInt();
 				sc.nextLine();
 
 				String type = "";
 				boolean validType = false;
 				while (!validType) {
-					switch (typeinput) {
+					switch (typeInput) {
 					case 1:
 						type = "Receita";
 						validType = true;
@@ -65,13 +67,13 @@ public class Home {
 						break;
 					default:
 						System.out.println("Opção inválida! Digite 1 ou 2: ");
-						typeinput = sc.nextInt();
+						typeInput = sc.nextInt();
 						sc.nextLine();
 						break;
 					}
 				}
 
-				System.out.println("Categorias:");
+				System.out.println("---- Categorias ----");
 				System.out.println("1 - Alimentação");
 				System.out.println("2 - Transporte");
 				System.out.println("3 - Moradia");
@@ -81,13 +83,13 @@ public class Home {
 				System.out.println("7 - Compras");
 				System.out.println("8 - Outros");
 				System.out.print("Escolha uma categoria: ");
-				int categoryinput = sc.nextInt();
+				int categoryInput = sc.nextInt();
 				sc.nextLine();
 
 				String category = "";
 				boolean validCategory = false;
 				while (!validCategory) {
-					switch (categoryinput) {
+					switch (categoryInput) {
 					case 1:
 						category = "Alimentação";
 						validCategory = true;
@@ -122,7 +124,7 @@ public class Home {
 						break;
 					default:
 						System.out.println("Opção inválida! Digite uma opção válida:");
-						categoryinput = sc.nextInt();
+						categoryInput = sc.nextInt();
 						sc.nextLine();
 						break;
 					}
@@ -132,11 +134,11 @@ public class Home {
 				boolean validDate = false;
 				while (!validDate) {
 					System.out.print("Data (formato DDMMAAAA, ex: 10082026): ");
-					String dateinput = sc.nextLine();
-					if (dateinput.length() == 8) {
-						String day = dateinput.substring(0, 2);
-						String month = dateinput.substring(2, 4);
-						String year = dateinput.substring(4, 8);
+					String dateInput = sc.nextLine();
+					if (dateInput.length() == 8) {
+						String day = dateInput.substring(0, 2);
+						String month = dateInput.substring(2, 4);
+						String year = dateInput.substring(4, 8);
 						date = day + "/" + month + "/" + year;
 						validDate = true;
 					} else {
@@ -154,13 +156,38 @@ public class Home {
 					System.out.println("Não há transações cadastradas!");
 				} else {
 					System.out.println("---- Transações ----");
-					for (String t : transactions) {
-						System.out.println(t);
+					for (int i = 0; i < transactions.size(); i++) {
+						System.out.println((i+1) + " - " + transactions.get(i));
 					}
 				}
 				break;
 			case 3:
-				System.out.println("Deletando trasação...");
+				System.out.println("---- Deletando Transação ----");
+				
+				if (transactions.isEmpty()) {
+					System.out.println("Não há transações cadastradas!");	
+					break;
+				} else {
+					System.out.println("---- Transações ----");
+					for (int i = 0; i < transactions.size(); i++) {
+						System.out.println((i+1) + " - " + transactions.get(i));
+					
+					}
+					
+					System.out.println("Digite a transação que deseja deletar:");
+					int deletInput = sc.nextInt();
+					sc.nextLine();
+
+					if (deletInput >= 1 && deletInput <= transactions.size()) {
+					    transactions.remove(deletInput - 1);
+					    System.out.println("Transação removida!");
+					} else {
+					    System.out.println("Número inválido!");
+					}
+					
+				}
+		
+				
 				break;
 			case 4:
 				System.out.println("Saldo: R$xxxx");
