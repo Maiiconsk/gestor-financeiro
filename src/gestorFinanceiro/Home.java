@@ -84,13 +84,13 @@ public class Home {
 				System.out.println("7 - Compras");
 				System.out.println("8 - Outros");
 				System.out.print("Escolha uma categoria: ");
-				int categoryInput = sc.nextInt();
+				int categoryEditInput = sc.nextInt();
 				sc.nextLine();
 
 				String category = "";
 				boolean validCategory = false;
 				while (!validCategory) {
-					switch (categoryInput) {
+					switch (categoryEditInput) {
 					case 1:
 						category = "Alimentação";
 						validCategory = true;
@@ -125,7 +125,7 @@ public class Home {
 						break;
 					default:
 						System.out.println("Opção inválida! Digite uma opção válida:");
-						categoryInput = sc.nextInt();
+						categoryEditInput = sc.nextInt();
 						sc.nextLine();
 						break;
 					}
@@ -176,7 +176,7 @@ public class Home {
 					}
 				}
 
-				System.out.println("\nDigite a transação que deseja deletar:");
+				System.out.println("\nDigite a transação que deseja editar:");
 				int editInput = sc.nextInt();
 				sc.nextLine();
 
@@ -193,43 +193,166 @@ public class Home {
 
 					String[] partsEdit = transactions.get(editInput - 1).split(";");
 
-					switch (editOption) {
+					boolean stop = false;
 
-					case 1:
-						System.out.print("Nova Descrição: ");
-						partsEdit[0] = sc.nextLine();
-						break;
+					while (!stop) {
+						switch (editOption) {
 
-					case 2:
-						System.out.print("Novo Valor: ");
-						partsEdit[1] = sc.nextLine();
-						break;
+						case 1:
+							System.out.print("Nova Descrição: ");
+							partsEdit[0] = sc.nextLine();
+							break;
 
-					case 3:
-						System.out.print("Novo Tipo: ");
-						partsEdit[2] = sc.nextLine();
-						break;
+						case 2:
+							boolean editValue = false;
+							while (!editValue) {
+								System.out.print("Novo Valor: ");
+								String valueText = sc.nextLine().replace(",", ".");
+								try {
+									partsEdit[1] = String.valueOf(Double.parseDouble(valueText));
+									editValue = true;
+								} catch (NumberFormatException e) {
+									System.out.println("Valor inválido! Digite apenas números.");
+								}
+							}
 
-					case 4:
-						System.out.print("Nova Categoria: ");
-						partsEdit[3] = sc.nextLine();
-						break;
+							break;
 
-					case 5:
-						System.out.print("Nova Data: ");
-						partsEdit[4] = sc.nextLine();
-						break;
+						case 3:
+							System.out.println("Iipos:");
+							System.out.println("1 - Receita");
+							System.out.println("2 - Despesa");
+							System.out.println("Digite o Novo Tipo:");
+							int editTypeInput = sc.nextInt();
+							sc.nextLine();
 
-					default:
-						System.out.println("Opção inválida!");
-						break;
+							boolean editedType = false;
+							while (!editedType) {
+								switch (editTypeInput) {
+								case 1:
+									partsEdit[2] = "Receita";
+									editedType = true;
+									break;
+								case 2:
+									partsEdit[2] = "Despesa";
+									editedType = true;
+									break;
+								default:
+									System.out.println("Opção inválida! Digite 1 ou 2: ");
+									editTypeInput = sc.nextInt();
+									sc.nextLine();
+									break;
+								}
+							}
+							break;
+
+						case 4:
+							System.out.println("Categorias: ");
+							System.out.println("1 - Alimentação");
+							System.out.println("2 - Transporte");
+							System.out.println("3 - Moradia");
+							System.out.println("4 - Educação");
+							System.out.println("5 - Lazer");
+							System.out.println("6 - Saúde");
+							System.out.println("7 - Compras");
+							System.out.println("8 - Outros");
+							System.out.println("Digite a Nova Categoria:");
+							int categoryInput = sc.nextInt();
+							sc.nextLine();
+
+							boolean editCategory = false;
+							while (!editCategory) {
+								switch (categoryInput) {
+								case 1:
+									partsEdit[3] = "Alimentação";
+									editCategory = true;
+									break;
+								case 2:
+									partsEdit[3] = "Transporte";
+									editCategory = true;
+									break;
+								case 3:
+									partsEdit[3] = "Moradia";
+									editCategory = true;
+									break;
+								case 4:
+									partsEdit[3] = "Educação";
+									editCategory = true;
+									break;
+								case 5:
+									partsEdit[3] = "Lazer";
+									editCategory = true;
+									break;
+								case 6:
+									partsEdit[3] = "Saúde";
+									editCategory = true;
+									break;
+								case 7:
+									partsEdit[3] = "Compras";
+									editCategory = true;
+									break;
+								case 8:
+									partsEdit[3] = "Outros";
+									editCategory = true;
+									break;
+								default:
+									System.out.println("Opção inválida! Digite uma opção válida:");
+									categoryInput = sc.nextInt();
+									sc.nextLine();
+									break;
+								}
+							}
+							break;
+
+						case 5:
+							System.out.print("Nova Data ");
+
+							boolean editDate = false;
+							while (!editDate) {
+								System.out.print("(formato DDMMAAAA, ex: 10082026): ");
+								String dateInput = sc.nextLine();
+								if (dateInput.length() == 8) {
+									String day = dateInput.substring(0, 2);
+									String month = dateInput.substring(2, 4);
+									String year = dateInput.substring(4, 8);
+									partsEdit[4] = day + "/" + month + "/" + year;
+									editDate = true;
+								} else {
+									System.out.println("Data inválida! Digite uma data válida.");
+								}
+							}
+							
+							
+							
+							
+							break;
+
+						default:
+							System.out.println("Opção inválida!");
+							break;
+						}
+
+						System.out.println("Deseja editar outra informação? (S)Sim ou (N)Não.");
+						String stopOption = sc.nextLine();
+
+						if (stopOption.equalsIgnoreCase("S") || stopOption.equalsIgnoreCase("Sim")) {
+							System.out.println("Digite a próxima opção que deseja editar: ");
+							editOption = sc.nextInt();
+							sc.nextLine();
+
+							continue;
+						} else {
+							stop = true;
+						}
+
 					}
-					
-					  String transacaoAtualizada = partsEdit[0] + ";" + partsEdit[1] + ";" + partsEdit[2] + ";" + partsEdit[3] + ";" + partsEdit[4];
-					    transactions.set(editInput - 1, transacaoAtualizada);
 
-					    System.out.println("Transação atualizada!");
-					
+					String transacaoAtualizada = partsEdit[0] + ";" + partsEdit[1] + ";" + partsEdit[2] + ";"
+							+ partsEdit[3] + ";" + partsEdit[4];
+					transactions.set(editInput - 1, transacaoAtualizada);
+
+					System.out.println("Transação atualizada!");
+
 				} else {
 					System.out.println("Transação inválida!");
 				}
