@@ -2,27 +2,33 @@ package gestorFinanceiro;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Home {
 
 	public static void main(String[] args) {
+
 		Scanner sc = new Scanner(System.in);
 
 		boolean run = true;
 
-		ArrayList<String> transactions = new ArrayList<>();
+		ArrayList<String> transactions = loadTransactionsFromFile();
 
 		while (run) {
 
 			int option = -1;
 
 			System.out.println("======== Controle de Gastos ========");
-			System.out.println("Digite (1) Adicionar uma Transação");
-			System.out.println("Digite (2) Listar suas Transação");
-			System.out.println("Digite (3) Editar uma Transação");
-			System.out.println("Digite (4) Excluir uma Transação");
-			System.out.println("Digite (5) Ver Saldo");
-			System.out.println("Digite (0) Fechar o programa");
+			System.out.println("1 - Adicionar uma Transação");
+			System.out.println("2 - Listar suas Transações");
+			System.out.println("3 - Editar uma Transação");
+			System.out.println("4 - Excluir uma Transação");
+			System.out.println("5 - Ver Saldo");
+			System.out.println("0 - Fechar o programa");
+			System.out.print("Digite a opção desejada: ");
 			option = sc.nextInt();
 			sc.nextLine();
 
@@ -149,6 +155,7 @@ public class Home {
 
 				String transaction = description + ";" + value + ";" + type + ";" + category + ";" + date;
 				transactions.add(transaction);
+				saveTransactionsToFile(transactions);
 
 				System.out.println("Transação Adicionada!");
 				break;
@@ -350,6 +357,7 @@ public class Home {
 					String transacaoAtualizada = partsEdit[0] + ";" + partsEdit[1] + ";" + partsEdit[2] + ";"
 							+ partsEdit[3] + ";" + partsEdit[4];
 					transactions.set(editInput - 1, transacaoAtualizada);
+					saveTransactionsToFile(transactions);
 
 					System.out.println("Transação atualizada!");
 
@@ -378,6 +386,8 @@ public class Home {
 
 					if (deletInput >= 1 && deletInput <= transactions.size()) {
 						transactions.remove(deletInput - 1);
+						saveTransactionsToFile(transactions);
+						
 						System.out.println("Transação removida!");
 					} else {
 						System.out.println("Número inválido!");
@@ -419,4 +429,27 @@ public class Home {
 		sc.close();
 	}
 
+	public static void saveTransactionsToFile(ArrayList<String> transactions) {
+		try (FileWriter writer = new FileWriter("transactions.txt")) {
+			for (String transaction : transactions) {
+				writer.write(transaction + System.lineSeparator());
+			}
+		} catch (IOException e) {
+			System.out.println("Erro ao salvar transações no arquivo: " + e.getMessage());
+		}
+	}
+
+	public static ArrayList<String> loadTransactionsFromFile() {
+		ArrayList<String> transactions = new ArrayList<>();
+		try (BufferedReader reader = new BufferedReader(new FileReader("transactions.txt"))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				transactions.add(line);
+			}
+		} catch (IOException e) {
+			System.out.println("Erro ao carregar transações do arquivo: " + e.getMessage());
+		}
+		return transactions;
+	}
 }
+
