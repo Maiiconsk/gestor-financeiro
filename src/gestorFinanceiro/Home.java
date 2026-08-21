@@ -15,7 +15,7 @@ public class Home {
 
 		boolean run = true;
 
-		ArrayList<String> transactions = loadTransactionsFromFile();
+		ArrayList<Transaction> transactions = loadTransactionsFromFile();
 
 		while (run) {
 
@@ -37,17 +37,19 @@ public class Home {
 			case 1:
 				System.out.println("---- Transação ----");
 
-				System.out.print("Descrição: ");
-				String description = sc.nextLine();
+				Transaction newTransaction = new Transaction();
 
-				double value = -1;
+				System.out.print("Descrição: ");
+				newTransaction.setDescription(sc.nextLine());
+
+				float value = -1;
 				boolean validValue = false;
 
 				while (!validValue) {
 					System.out.print("Valor: ");
 					String valueText = sc.nextLine().replace(",", ".");
 					try {
-						value = Double.parseDouble(valueText);
+						newTransaction.setValue(value = Float.parseFloat(valueText));
 						validValue = true;
 					} catch (NumberFormatException e) {
 						System.out.println("Valor inválido! Digite apenas números.");
@@ -60,16 +62,15 @@ public class Home {
 				int typeInput = sc.nextInt();
 				sc.nextLine();
 
-				String type = "";
 				boolean validType = false;
 				while (!validType) {
 					switch (typeInput) {
 					case 1:
-						type = "Receita";
+						newTransaction.setType("Receita");
 						validType = true;
 						break;
 					case 2:
-						type = "Despesa";
+						newTransaction.setType("Despesa");
 						validType = true;
 						break;
 					default:
@@ -93,40 +94,39 @@ public class Home {
 				int categoryEditInput = sc.nextInt();
 				sc.nextLine();
 
-				String category = "";
 				boolean validCategory = false;
 				while (!validCategory) {
 					switch (categoryEditInput) {
 					case 1:
-						category = "Alimentação";
+						newTransaction.setCategory("Alimentação");
 						validCategory = true;
 						break;
 					case 2:
-						category = "Transporte";
+						newTransaction.setCategory("Transporte");
 						validCategory = true;
 						break;
 					case 3:
-						category = "Moradia";
+						newTransaction.setCategory("Moradia");
 						validCategory = true;
 						break;
 					case 4:
-						category = "Educação";
+						newTransaction.setCategory("Educação");
 						validCategory = true;
 						break;
 					case 5:
-						category = "Lazer";
+						newTransaction.setCategory("Lazer");
 						validCategory = true;
 						break;
 					case 6:
-						category = "Saúde";
+						newTransaction.setCategory("Saúde");
 						validCategory = true;
 						break;
 					case 7:
-						category = "Compras";
+						newTransaction.setCategory("Compras");
 						validCategory = true;
 						break;
 					case 8:
-						category = "Outros";
+						newTransaction.setCategory("Outros");
 						validCategory = true;
 						break;
 					default:
@@ -147,16 +147,15 @@ public class Home {
 						String month = dateInput.substring(2, 4);
 						String year = dateInput.substring(4, 8);
 						date = day + "/" + month + "/" + year;
+						newTransaction.setDate(date);
 						validDate = true;
 					} else {
 						System.out.println("Data inválida! Digite uma data válida.");
 					}
 				}
 
-				String transaction = description + ";" + value + ";" + type + ";" + category + ";" + date;
-				transactions.add(transaction);
+				transactions.add(newTransaction);
 				saveTransactionsToFile(transactions);
-
 				System.out.println("Transação Adicionada!");
 				break;
 			case 2:
@@ -165,7 +164,8 @@ public class Home {
 				} else {
 					System.out.println("---- Transações ----");
 					for (int i = 0; i < transactions.size(); i++) {
-						System.out.println((i + 1) + " - " + transactions.get(i));
+						Transaction temp = transactions.get(i);
+						System.out.println((i + 1) + " - " + temp);
 					}
 				}
 				break;
@@ -178,10 +178,12 @@ public class Home {
 				} else {
 					System.out.println("---- Transações ----");
 					for (int i = 0; i < transactions.size(); i++) {
-						System.out.println((i + 1) + " - " + transactions.get(i));
-
+						Transaction temp = transactions.get(i);
+						System.out.println((i + 1) + " - " + temp);
 					}
 				}
+				
+				
 
 				System.out.println("\nDigite a transação que deseja editar:");
 				int editInput = sc.nextInt();
@@ -198,16 +200,17 @@ public class Home {
 
 				if (editInput >= 1 && editInput <= transactions.size()) {
 
-					String[] partsEdit = transactions.get(editInput - 1).split(";");
-
 					boolean stop = false;
 
+					Transaction editTransaction = transactions.get(editInput -1);
+
 					while (!stop) {
+
 						switch (editOption) {
 
 						case 1:
 							System.out.print("Nova Descrição: ");
-							partsEdit[0] = sc.nextLine();
+							editTransaction.setDescription(sc.nextLine());
 							break;
 
 						case 2:
@@ -216,7 +219,7 @@ public class Home {
 								System.out.print("Novo Valor: ");
 								String valueText = sc.nextLine().replace(",", ".");
 								try {
-									partsEdit[1] = String.valueOf(Double.parseDouble(valueText));
+									editTransaction.setValue(Float.parseFloat(valueText));
 									editValue = true;
 								} catch (NumberFormatException e) {
 									System.out.println("Valor inválido! Digite apenas números.");
@@ -237,11 +240,11 @@ public class Home {
 							while (!editedType) {
 								switch (editTypeInput) {
 								case 1:
-									partsEdit[2] = "Receita";
+									editTransaction.setType("Receita");
 									editedType = true;
 									break;
 								case 2:
-									partsEdit[2] = "Despesa";
+									editTransaction.setType("Despesa");
 									editedType = true;
 									break;
 								default:
@@ -271,35 +274,35 @@ public class Home {
 							while (!editCategory) {
 								switch (categoryInput) {
 								case 1:
-									partsEdit[3] = "Alimentação";
+									editTransaction.setCategory("Alimentação");
 									editCategory = true;
 									break;
 								case 2:
-									partsEdit[3] = "Transporte";
+									editTransaction.setCategory("Transporte");
 									editCategory = true;
 									break;
 								case 3:
-									partsEdit[3] = "Moradia";
+									editTransaction.setCategory("Moradia");
 									editCategory = true;
 									break;
 								case 4:
-									partsEdit[3] = "Educação";
+									editTransaction.setCategory("Educação");
 									editCategory = true;
 									break;
 								case 5:
-									partsEdit[3] = "Lazer";
+									editTransaction.setCategory("Lazer");
 									editCategory = true;
 									break;
 								case 6:
-									partsEdit[3] = "Saúde";
+									editTransaction.setCategory("Saúde");
 									editCategory = true;
 									break;
 								case 7:
-									partsEdit[3] = "Compras";
+									editTransaction.setCategory("Compras");
 									editCategory = true;
 									break;
 								case 8:
-									partsEdit[3] = "Outros";
+									editTransaction.setCategory("Outros");
 									editCategory = true;
 									break;
 								default:
@@ -322,16 +325,14 @@ public class Home {
 									String day = dateInput.substring(0, 2);
 									String month = dateInput.substring(2, 4);
 									String year = dateInput.substring(4, 8);
-									partsEdit[4] = day + "/" + month + "/" + year;
+									String formatedDate = day + "/" + month + "/" + year;
+									editTransaction.setDate(formatedDate);
 									editDate = true;
 								} else {
 									System.out.println("Data inválida! Digite uma data válida.");
 								}
 							}
-							
-							
-							
-							
+
 							break;
 
 						default:
@@ -354,11 +355,8 @@ public class Home {
 
 					}
 
-					String transacaoAtualizada = partsEdit[0] + ";" + partsEdit[1] + ";" + partsEdit[2] + ";"
-							+ partsEdit[3] + ";" + partsEdit[4];
-					transactions.set(editInput - 1, transacaoAtualizada);
+					transactions.set(editInput - 1, editTransaction);
 					saveTransactionsToFile(transactions);
-
 					System.out.println("Transação atualizada!");
 
 				} else {
@@ -376,8 +374,8 @@ public class Home {
 				} else {
 					System.out.println("---- Transações ----");
 					for (int i = 0; i < transactions.size(); i++) {
-						System.out.println((i + 1) + " - " + transactions.get(i));
-
+						Transaction temp = transactions.get(i);
+						System.out.println((i + 1) + " - " + temp);
 					}
 
 					System.out.println("\nDigite a transação que deseja deletar:");
@@ -387,7 +385,7 @@ public class Home {
 					if (deletInput >= 1 && deletInput <= transactions.size()) {
 						transactions.remove(deletInput - 1);
 						saveTransactionsToFile(transactions);
-						
+
 						System.out.println("Transação removida!");
 					} else {
 						System.out.println("Número inválido!");
@@ -399,15 +397,12 @@ public class Home {
 
 				double balance = 0;
 
-				for (String t : transactions) {
-					String[] parts = t.split(";");
-					Double valueOutput = Double.parseDouble(parts[1]);
-					String typeOutput = parts[2];
-
-					if (typeOutput.equals("Receita")) {
-						balance += valueOutput;
+				for (int i = 0; i < transactions.size(); i++) {
+					Transaction temp = transactions.get(i);
+					if (temp.getType().equalsIgnoreCase("Receita")) {
+						balance += temp.getValue();
 					} else {
-						balance -= valueOutput;
+						balance -= temp.getValue();
 					}
 				}
 
@@ -429,27 +424,34 @@ public class Home {
 		sc.close();
 	}
 
-	public static void saveTransactionsToFile(ArrayList<String> transactions) {
-		try (FileWriter writer = new FileWriter("transactions.txt")) {
-			for (String transaction : transactions) {
-				writer.write(transaction + System.lineSeparator());
-			}
-		} catch (IOException e) {
-			System.out.println("Erro ao salvar transações no arquivo: " + e.getMessage());
-		}
+	public static void saveTransactionsToFile(ArrayList<Transaction> transactions) {
+	    try (FileWriter writer = new FileWriter("transactions.txt")) {
+	        for (Transaction t : transactions) {
+	            String linha = t.getDescription() + ";" + t.getValue() + ";" + t.getType() + ";" + t.getCategory() + ";" + t.getDate();
+	            writer.write(linha + System.lineSeparator());
+	        }
+	    } catch (IOException e) {
+	        System.out.println("Erro ao salvar transações no arquivo: " + e.getMessage());
+	    }
 	}
 
-	public static ArrayList<String> loadTransactionsFromFile() {
-		ArrayList<String> transactions = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(new FileReader("transactions.txt"))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				transactions.add(line);
-			}
-		} catch (IOException e) {
-			System.out.println("Erro ao carregar transações do arquivo: " + e.getMessage());
-		}
-		return transactions;
+	public static ArrayList<Transaction> loadTransactionsFromFile() {
+	    ArrayList<Transaction> transactions = new ArrayList<>();
+	    try (BufferedReader reader = new BufferedReader(new FileReader("transactions.txt"))) {
+	        String line;
+	        while ((line = reader.readLine()) != null) {
+	            String[] parts = line.split(";");
+	            Transaction t = new Transaction();
+	            t.setDescription(parts[0]);
+	            t.setValue(Float.parseFloat(parts[1]));
+	            t.setType(parts[2]);
+	            t.setCategory(parts[3]);
+	            t.setDate(parts[4]);
+	            transactions.add(t);
+	        }
+	    } catch (IOException e) {
+	        System.out.println("Nenhum histórico encontrado. Começando do zero.");
+	    }
+	    return transactions;
 	}
 }
-
